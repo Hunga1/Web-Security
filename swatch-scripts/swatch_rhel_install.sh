@@ -27,6 +27,7 @@ error=$?
 if [ $error -ne 0 ];
 then
 	echo " Error: Could not successfully install dependencies with yum!"
+	exit 1
 fi
 
 cpan File::Tail
@@ -35,6 +36,7 @@ error=$?
 if [ $error -ne 0 ];
 then
 	echo " Error: Could not successfully install dependency File::Tail with cpan!"
+	exit 1
 fi
 
 printf '\n Finished installing dependencies!\n'
@@ -58,6 +60,7 @@ make && make test && make install && make realclean &> /dev/null
 if [ $error -ne 0 ];
 then
 	echo " Error: Could not compile swatch!"
+	exit 1
 fi
 
 # Return to old current working directory
