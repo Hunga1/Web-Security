@@ -31,7 +31,7 @@ then
 	then
 		mkdir /opt/src
 	fi
-	wget --directory-prefix=/opt/src/ http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+	wget --directory-prefix=/opt/src/ http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm &> /dev/null
 	rpm -ivh /opt/src/epel-release-6-8.noarch.rpm
 else
 	printf "\n Detected 64-bit Kernel... \n"
@@ -41,7 +41,7 @@ else
         then
                 mkdir /opt/src
         fi
-	wget --directory-prefix=/opt/src/ http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+	wget --directory-prefix=/opt/src/ http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm &> /dev/null
 	rpm -ivh /opt/src/epel-release-6-8.noarch.rpm
 fi	
 
@@ -83,7 +83,8 @@ then
 fi
 
 # Install Mod Security
-yum install -y mod_security
+printf '\n Installing Apache Mod Security!\n'
+yum install -y mod_security &> /dev/null
 
 # Install OWASP CRS from source through git repository
 printf '\n Installing OWASP Core Rule Set!\n'
@@ -114,7 +115,7 @@ fi
 # Make "whitelist" file to further configure OWASP rules
 # Stores configuration in a seperate configuration directory and file (/etc/httpd/modsecurity.d/whitelist.conf)
 printf '\n Configuring OWASP Core Rule Set!\n'
-mkdir /etc/httpd/modsecurity.d
+# mkdir /etc/httpd/modsecurity.d
 touch /etc/httpd/modsecurity.d/whitelist.conf
 
 # Default whitelist configurations
@@ -127,7 +128,7 @@ touch /etc/httpd/modsecurity.d/whitelist.conf
 #	Check server response bodies for malicious activity
 # SecDataDir /etc/httpd/logs
 #	Set where ModSecurity's working directory will be for persistent data
-printf "# Whitelist Configuration File\n# Use to configure OWASP CRS and/or ModSecurity Firewall\n\n# OWASP CRS Configuration\n<IfModule mod_security2.c>\n\tSecRuleEngine On\n\tSecRequestBodyAccess On\n\tSecResponseBodyAccess On\n\tSecDataDir /etc/httpd/logs\n</IfModule>\n" > /etc/httpd/modsecurity.d/whitelist.conf
+printf "# Whitelist Configuration File\n# Use to configure OWASP CRS and/or ModSecurity Firewall\n\n# OWASP CRS Configuration\n<IfModule mod_security2.c>\n\tSecRuleEngine On\n\tSecRequestBodyAccess On\n\tSecResponseBodyAccess On\n\tSecDataDir /tmp\n</IfModule>\n" > /etc/httpd/modsecurity.d/whitelist.conf
 
 # Whitelist the use of Numeric IP Addresses
 printf "\n#  Whitelist Numeric IP Addresses\n#<LocationMatch .*>\n#\t<IfModule mod_security2.c>\n#\t\tSecRuleRemoveById 960017\n#\t</IfModule>\n#</LocationMatch>\n" >> /etc/httpd/modsecurity.d/whitelist.conf
