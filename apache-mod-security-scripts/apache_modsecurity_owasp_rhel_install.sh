@@ -19,6 +19,32 @@
 echo " Welcome to the Apache Mod Security with OWASP CRS installation script!"
 printf '\n Checking preliminary details about your system...\n'
 
+# Install 32-bit or 64-bit epel repo
+uname -a | grep i686 &> /dev/null
+kernel=echo $?
+if [ $kernel -eq 0 ];
+then
+	printf "\n Detected 32-bit Kernel... \n"
+	ls -ld /opt/src &> /dev/null
+	error=$?
+	if [ $error -ne 0 ];
+	then
+		mkdir /opt/src
+	fi
+	wget --directory-prefix=/opt/src/ http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+	rpm -ivh /opt/src/epel-release-6-8.noarch.rpm
+else
+	printf "\n Detected 64-bit Kernel... \n"
+	ls -ld /opt/src &> /dev/null
+	error=$?
+        if [ $error -ne 0 ];
+        then
+                mkdir /opt/src
+        fi
+	wget --directory-prefix=/opt/src/ http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+	rpm -ivh /opt/src/epel-release-6-8.noarch.rpm
+fi	
+
 # Preliminary Checks
 # Check if httpd directory exists
 ls -d /etc/httpd > /dev/null &> /dev/null
@@ -55,6 +81,9 @@ then
 	logger -t modsecurity_install -p user.crit Apache web server could not be restarted!
 	exit 1
 fi
+
+# Install Mod Security
+yum install -y mod_security
 
 # Install OWASP CRS from source through git repository
 printf '\n Installing OWASP Core Rule Set!\n'
@@ -99,6 +128,10 @@ touch /etc/httpd/modsecurity.d/whitelist.conf
 # SecDataDir /etc/httpd/logs
 #	Set where ModSecurity's working directory will be for persistent data
 printf "# Whitelist Configuration File\n# Use to configure OWASP CRS and/or ModSecurity Firewall\n\n# OWASP CRS Configuration\n<IfModule mod_security2.c>\n\tSecRuleEngine On\n\tSecRequestBodyAccess On\n\tSecResponseBodyAccess On\n\tSecDataDir /etc/httpd/logs\n</IfModule>\n" > /etc/httpd/modsecurity.d/whitelist.conf
+
+# Whitelist the use of Numeric IP Addresses
+printf "\n#  Whitelist Numeric IP Addresses\n#<LocationMatch .*>\n#\t<IfModule mod_security2.c>\n#\t\tSecRuleRemoveById 960017\n#\t</IfModule>\n#</LocationMatch>\n" >> /etc/httpd/modsecurity.d/whitelist.conf
+
 
 printf ' Finished configuring OWASP Core Rule Set!\n'
 
