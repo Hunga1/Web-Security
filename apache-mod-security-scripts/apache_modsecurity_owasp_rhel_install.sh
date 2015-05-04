@@ -24,7 +24,7 @@ uname -a | grep i686 &> /dev/null
 kernel=$?
 if [ $kernel -eq 0 ];
 then
-	printf "\n Detected 32-bit Kernel... \n"
+	printf "\n Detected 32-bit Kernel... \n\n"
 	ls -ld /opt/src &> /dev/null
 	error=$?
 	if [ $error -ne 0 ];
@@ -56,7 +56,7 @@ then
 	exit 1
 fi 
 
-printf ' Finished preliminary checks.\n'
+printf '\n Finished preliminary checks.\n'
 
 # Install dependencies for Apache Mod_Security
 printf '\n Installing Dependencies!\n'
@@ -138,7 +138,7 @@ printf ' Finished configuring OWASP Core Rule Set!\n'
 
 # Restart httpd
 printf '\n Restarting Apache!\n'
-service httpd restart &> /dev/null
+service httpd restart
 error=$?
 if [ $error -ne 0 ];
 then
