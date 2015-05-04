@@ -21,7 +21,7 @@ cwd=`pwd`
 
 # Install Dependencies
 printf '\n Installing dependencies!\n\n'
-yum install -y perl-cpan perl-Date-Calc-6.3-2.el6.noarch perl-TimeDate-1.16-13.el6.noarch perl-Date-Manip-6.24-1.el6.noarch perl-Time-HiRes-1.9721-136.el6_6.1.i686 &> /dev/null
+yum install -y perl-CPAN perl-Date-Calc-6.3-2.el6.noarch perl-TimeDate-1.16-13.el6.noarch perl-Date-Manip-6.24-1.el6.noarch perl-Time-HiRes-1.9721-136.el6_6.1.i686 &> /dev/null
 error=$?
 
 if [ $error -ne 0 ];
@@ -67,6 +67,7 @@ fi
 cd $cwd
 
 # Exit message
+printf "\033c"
 printf '\n Finished installation of SWATCH!\n'
 printf ' Installation directory can be found at /opt/work/swatch/\n'
 printf ' Enjoy!\n'

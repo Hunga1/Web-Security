@@ -2,5 +2,6 @@
 # swatch --config-file=~/Web-Security/swatch-scripts/swatch-examples/.swatchrc.secure --tail-file=/var/log/secure
 
 watchfor /authentication\ failure.*user=root$/ 
-mail addresses=, 
-subject=root_login_attempt
+	mail addresses=, 
+#	subject=root_login_attempt
+# TODO: subject() function undefined. Possible missing Perl dependency 
