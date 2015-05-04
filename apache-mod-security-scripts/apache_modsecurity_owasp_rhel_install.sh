@@ -15,7 +15,7 @@
 # *** Last Tested: 4/22/15
 
 # Beginning of Script
-
+printf "\n"
 echo " Welcome to the Apache Mod Security with OWASP CRS installation script!"
 printf '\n Checking preliminary details about your system...\n'
 
