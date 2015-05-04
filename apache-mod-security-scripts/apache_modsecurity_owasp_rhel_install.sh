@@ -21,7 +21,7 @@ printf '\n Checking preliminary details about your system...\n'
 
 # Install 32-bit or 64-bit epel repo
 uname -a | grep i686 &> /dev/null
-kernel=echo $?
+kernel=$?
 if [ $kernel -eq 0 ];
 then
 	printf "\n Detected 32-bit Kernel... \n"
